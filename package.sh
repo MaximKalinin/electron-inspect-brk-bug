@@ -1,8 +1,20 @@
 #!/bin/sh
-rm -rf ./dist ./electron-v35.1.3-darwin-arm64.zip
+
+if [ -z "$1" ]; then
+    echo "Error: Please provide Electron version as argument"
+    echo "Usage: $0 <version>"
+    echo "Example: $0 v35.1.3"
+    exit 1
+fi
+
+VERSION=$1
+ZIP_FILE="electron-${VERSION}-darwin-arm64.zip"
+
+rm -rf ./dist
+rm -f *.zip
 mkdir -p ./dist
-curl -L -o ./electron-v35.1.3-darwin-arm64.zip https://github.com/electron/electron/releases/download/v35.1.3/electron-v35.1.3-darwin-arm64.zip
-unzip -o ./electron-v35.1.3-darwin-arm64.zip -d ./dist/
+curl -L -o "./${ZIP_FILE}" "https://github.com/electron/electron/releases/download/${VERSION}/${ZIP_FILE}"
+unzip -o "./${ZIP_FILE}" -d ./dist/
 mkdir -p ./dist/Electron.app/Contents/Resources/app/
 cp package.json ./dist/Electron.app/Contents/Resources/app/
 cp index.js ./dist/Electron.app/Contents/Resources/app/
